@@ -3,7 +3,7 @@ package com.camihruiz24.amphibians_app.ui.theme
 import androidx.compose.ui.graphics.Color
 
 
-val md_theme_light_primary = Color(0xFF006970)
+val md_theme_light_primary = Color(0xFF007050)
 val md_theme_light_onPrimary = Color(0xFFFFFFFF)
 val md_theme_light_primaryContainer = Color(0xFF82F3FF)
 val md_theme_light_onPrimaryContainer = Color(0xFF002022)

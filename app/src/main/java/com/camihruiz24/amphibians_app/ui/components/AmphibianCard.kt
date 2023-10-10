@@ -1,4 +1,11 @@
 package com.camihruiz24.amphibians_app.ui.components
+
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -7,6 +14,10 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -26,7 +37,27 @@ fun AmphibianCard(amphibian: Amphibian, modifier: Modifier = Modifier) {
         elevation = CardDefaults.cardElevation(2.dp),
         shape = MaterialTheme.shapes.large
     ) {
-        Column(Modifier) {
+
+        var expanded: Boolean by remember { mutableStateOf(false) }
+        val itemColor by animateColorAsState(
+            targetValue = when (expanded) {
+                true -> MaterialTheme.colorScheme.inversePrimary
+                false -> MaterialTheme.colorScheme.primaryContainer
+            },
+            label = "Color animation"
+        )
+
+        Column(
+            Modifier
+                .animateContentSize(
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioLowBouncy,
+                        stiffness = Spring.StiffnessLow,
+                    )
+                )
+                .background(color = itemColor)
+                .clickable { expanded = !expanded }
+        ) {
             Text(
                 text = "${amphibian.name} (${amphibian.type})",
                 style = MaterialTheme.typography.titleLarge,
@@ -43,11 +74,12 @@ fun AmphibianCard(amphibian: Amphibian, modifier: Modifier = Modifier) {
                 error = painterResource(id = R.drawable.frog),
                 modifier = Modifier.fillMaxWidth()
             )
-            Text(
-                text = amphibian.description,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_medium))
-            )
+            if (expanded)
+                Text(
+                    text = amphibian.description,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_medium))
+                )
         }
     }
 }
